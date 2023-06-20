@@ -1,0 +1,30 @@
+// config environment variables
+import * as dotenv from "dotenv";
+dotenv.config();
+// handle all errors, insted of "try-catch"
+import "express-async-errors";
+// create "logfile.log" & { logger } objcet
+import "./startup/logger";
+// accept file manager database
+import "./controllers/file";
+// import modules
+import express from "express";
+import debug from "debug";
+import appConfig from "./startup/config";
+import db from "./startup/db";
+import checkMainRoute, { mainRoute, mainRouteProtect } from "./startup/checkRoute";
+import router from "./routes";
+
+// start app with these funcrion modules
+const mainDebug = debug("app:main");
+const app = express();
+appConfig(app);
+db();
+checkMainRoute(mainRoute, false);
+checkMainRoute(mainRouteProtect, true);
+
+// routes director
+app.use("/", router);
+
+const port = process.env.PORT || 5000;
+app.listen(port, () => mainDebug(`listen to port ${port}`));

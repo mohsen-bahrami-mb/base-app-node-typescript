@@ -1,0 +1,109 @@
+<!--
+<% data = include("../components/parseData") %>
+<% success = include("../components/parseSuccess") %>
+<% message = include("../components/parseMessage") %>
+<% err = include("../components/parseErr") %>
+<% msg = include("../components/parseMsg") %>
+-->
+<h1>dir</h1>
+
+<pre><%= data %></pre>
+<pre><%= data.dir %></pre>
+<pre><%= data.dir_description %></pre>
+<pre><%= data.new_dir %></pre>
+<pre><%= data.url %></pre>
+<pre><%= err %></pre>
+<pre><%= msg %></pre>
+<pre><%= success %></pre>
+<pre><%= message %></pre>
+
+<span>tree directory</span>
+<!--
+<% data.url.split("::").map((part,index,array)=> { %>
+    <% link = "" %>
+    <% linkText = "" %>
+    <% for(let i = 0; i < index; i++) { %>
+        <% if(part.length > 0 && array[i] !== "") { %>
+            <% link += i === 0 ? array[i] : ("::"+array[i]) %>
+            <% linkText += i === 0 ? "/" : ("::"+array[i]) %>
+        <% } %>
+    <% } %>
+-->
+<div>
+    <a href="<%= link %>">
+        <%= linkText %>
+    </a>
+</div>
+<!--
+<% }); %>
+-->
+
+<form action="<%= data.url %>" method="post">
+    <input type="text" name="_name" placeholder="directory name" value="">
+    <input type="submit" value="create dir">
+</form>
+<form action="<%= data.url %>?_upload=true" method="post" enctype="multipart/form-data">
+    <input type="file" multiple name="_upload">
+    <input type="submit" value="upload">
+</form>
+<table>
+    <thead>
+        <tr>
+            <th>name</th>
+            <th>path</th>
+            <th>size</th>
+            <th>copy</th>
+            <th>rename</th>
+            <th>delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        <% if(data.dir) data.dir.map((item,index)=> { %>
+            <!-- 
+                <% iName = item[2] === 'file' ? item[1].replace(/(.*\/)(.*\-)(.*)/,"$3") : item[0] %>
+                <% iNamePath = item[2] === 'file' ? item[1].replace(/(.*\/)(.*\-)(.*)/,"$1$2") : item[1].replace(item[0],"") %>
+            -->
+            <tr>
+                <td>
+                    <a href="<%= (item[2]==='dir')?(data.url.replace(/\/dir$/, '/dir/') + '::' + item[0]):item[1] %>"
+                        target="<%= (item[2]==='dir' )?'_self':'_blank' %>">
+                        <%= iName %>
+                    </a>
+                </td>
+                <td>
+                    <%= item[1] %>
+                </td>
+                <td>
+                    <%= (item[3] / 1024 / 1024).toFixed(4) %>
+                        <span>MB</span>
+                </td>
+                <td>
+                    <form action="<%= data.url.replace(/(.*)(\/dir)(.*)/, " $1/copy$3") %>" method="post">
+                        <input type="hidden" name="base_path" value="<%= item[1] %>">
+                        <input type="text" name="dist_path" placeholder="dist path">
+                        <label for="keep-<%= index %>">keep</label>
+                        <input type="radio" id="keep-<%= index %>" name="keep" placeholder="keep" checked value="true">
+                        <label for="remove-<%= index %>">remove</label>
+                        <input type="radio" id="remove-<%= index %>" name="keep" placeholder="keep" value="false">
+                        <input type="submit" value="copy">
+                    </form>
+                </td>
+                <td>
+                    <form action="<%= data.url %>?method=put&dir=<%= (item[2]==='dir')?'true':'false' %>" method="post">
+                        <input type="hidden" name="_name" placeholder="name" value="<%= item[1] %>">
+                        <input type="hidden" name="_new_name" placeholder="new name" value="<%= iNamePath %>">
+                        <input type="text" name="_new_name" placeholder="new name" value="<%= iName %>">
+                        <input type="submit" value="rename">
+                    </form>
+                </td>
+                <td>
+                    <form action="<%= data.url %>?method=delete&dir=<%= (item[2]==='dir')?'true':'false' %>"
+                        method="post">
+                        <input type="hidden" name="_name" placeholder="name" value="<%= item[1] %>">
+                        <input type="submit" value="delete">
+                    </form>
+                </td>
+            </tr>
+            <% }); %>
+    </tbody>
+</table>
