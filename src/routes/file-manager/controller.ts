@@ -1,11 +1,14 @@
 // import modules
+import { FMDB } from "../../controllers/file";
 // import controllers
 import Controller, {
     getOneRoute, response, updateOtherAccount, updateSelfAccount,
     updateRoute, renameOne, readDir, createDir, deleteOne, copyOne
 } from "../controller";
 // import middleware
-// import modules types
+// import models
+import File from "../../models/file";
+// import types
 import Express from "express";
 
 export default new (class extends Controller {
@@ -85,8 +88,8 @@ export default new (class extends Controller {
                 data: { url: noQueryUrl, err: ["فایلی دریافت نشد، یک فایل انخاب کنید"] },
                 req, type: "redirect", view: noQueryUrl
             });
-            (req.files as globalThis.Express.Multer.File[]).forEach(async f => {
-                const file = new this.File({ path: f.path });
+            if (FMDB) (req.files as globalThis.Express.Multer.File[]).forEach(async f => {
+                const file = new File({ path: f.path });
                 await file.save();
             });
             response({
@@ -202,10 +205,6 @@ export default new (class extends Controller {
             if (deleteItem.file && deleteItem.file.length) {
                 const fileId: any[] = deleteItem.file.filter((f: any) => f.path === "" && f.path_reduce_file === "")
                     .map((f: any) => f._id.toString());
-                const course = await this.Course.find({ "files.file_id": { $in: fileId } });
-                await Promise.all(course.map(async c => {
-                    c.files = c.files.filter(f => !fileId.includes(f.file_id?.toString())); await c.save();
-                }));
             }
             return response({
                 res, message: "delete directory or file in root file manager directory",
@@ -224,10 +223,6 @@ export default new (class extends Controller {
             if (deleteItem.file && deleteItem.file.length) {
                 const fileId: any[] = deleteItem.file.filter((f: any) => f.path === "" && f.path_reduce_file === "")
                     .map((f: any) => f._id.toString());
-                const course = await this.Course.find({ "files.file_id": { $in: fileId } });
-                await Promise.all(course.map(async c => {
-                    c.files = c.files.filter(f => !fileId.includes(f.file_id?.toString())); await c.save();
-                }));
             }
             return response({
                 res, message: "delete directory or file",

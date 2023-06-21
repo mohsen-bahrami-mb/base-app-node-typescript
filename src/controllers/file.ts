@@ -7,7 +7,7 @@ import FileDB from "../models/file";
 // import types
 import { FileManager } from "../types/appType";
 
-let FMDB = false;
+export let FMDB = false;
 /** accept file manager database */
 export default (function acceptFMDB() { FMDB = true })();
 
