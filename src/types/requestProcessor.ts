@@ -10,7 +10,7 @@ export type AppResponse = {
     message?: string;
     data?: {};
     req?: Express.Request;
-    type?: "json" | "render" | "redirect";
+    type?: "json" | "render" | "redirect" | "render-nodb" | "redirect-nodb";
     view?: string;
 }
 

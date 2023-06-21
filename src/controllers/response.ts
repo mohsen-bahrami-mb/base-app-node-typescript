@@ -43,6 +43,14 @@ export default function response({
             res.status(sCode).redirect(view);
         });
     }
+    else if (req && type === "render-nodb" && typeof view === "string") {
+        // send RENDER response (no database data!!!)
+        res.status(sCode).render(view, {message, success, data });
+    }
+    else if (req && type === "redirect-nodb" && typeof view === "string") {
+        // send REDIRECT response (no database data!!!)
+        res.status(sCode).redirect(view);
+    }
     else {
         // send ERROR on concole, when use wrong of this function
         throw new Error(`received wrong response function - please check properties: 
