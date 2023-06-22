@@ -9,7 +9,7 @@ import { FileManager } from "../types/appType";
 
 export let FMDB = false;
 /** accept file manager database */
-export default (function acceptFMDB() { FMDB = true })();
+export default function acceptFMDB() { FMDB = true }
 
 /** 
  * @arguments `path` should be without `/public` 

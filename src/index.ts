@@ -5,8 +5,6 @@ dotenv.config();
 import "express-async-errors";
 // create "logfile.log" & { logger } objcet
 import "./startup/logger";
-// accept file manager database
-import "./controllers/file";
 // import modules
 import express from "express";
 import debug from "debug";
@@ -14,12 +12,17 @@ import appConfig from "./startup/config";
 import db from "./startup/db";
 import checkMainRoute, { mainRoute, mainRouteProtect } from "./startup/checkRoute";
 import router from "./routes";
+// import controller
+import acceptFMDB from "./controllers/file";
 
 // start app with these funcrion modules
 const mainDebug = debug("app:main");
 const app = express();
 appConfig(app);
 db();
+// accept file manager database
+acceptFMDB();
+
 checkMainRoute(mainRoute, false);
 checkMainRoute(mainRouteProtect, true);
 
