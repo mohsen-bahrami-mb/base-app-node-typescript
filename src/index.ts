@@ -25,6 +25,8 @@ checkMainRoute(mainRouteProtect, true);
 
 // routes director
 app.use("/", router);
+globalThis.appRoutes =
+    router.stack.filter(r => !new RegExp(r.regexp).exec("/^\/(.*)\/?(?=\/|$)/i")?.[0]).map(r => new RegExp(r.regexp));
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => mainDebug(`listen to port ${port}`));

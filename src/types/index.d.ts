@@ -10,6 +10,7 @@ import { Route } from "./routeController";
 
 /* eslint-disable no-var */
 declare global {
+    var appRoutes: any[];
     namespace Express {
         export interface Request {
             user: User;
