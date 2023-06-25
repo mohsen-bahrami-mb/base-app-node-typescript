@@ -9,7 +9,12 @@ export default class {
 
     static async anyValidator(req: Express.Request, res: Express.Response, next: Express.NextFunction): Promise<void> {
         let err: string[] = [];
-        if ("" !== "") err.push("");
-        checkValidateErr(req, res, next, err, undefined);
+        let { } = req.body;
+        (async () => {
+            new Promise((resolve, reject) => {
+                if ("" === "") resolve(true);
+                else reject("contact should be an object");
+            }).catch((v) => { err.push(v) });
+        })().finally(() => checkValidateErr(req, res, next, err) );
     }
 };
