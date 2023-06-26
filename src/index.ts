@@ -10,7 +10,7 @@ import express from "express";
 import debug from "debug";
 import appConfig from "./startup/config";
 import db from "./startup/db";
-import checkMainRoute, { mainRoute, mainRouteProtect } from "./startup/checkRoute";
+import checkMainRoute, { mainRoute, mainRouteProtect, createAppRoutes } from "./startup/checkRoute";
 import router from "./routes";
 // import controller
 import acceptFMDB from "./controllers/file";
@@ -28,8 +28,7 @@ checkMainRoute(mainRouteProtect, true);
 
 // routes director
 app.use("/", router);
-globalThis.appRoutes =
-    router.stack.filter(r => !new RegExp(r.regexp).exec("/^\/(.*)\/?(?=\/|$)/i")?.[0]).map(r => new RegExp(r.regexp));
+createAppRoutes();
 
 const port = process.env.PORT || 5000;
 app.listen(port, () => mainDebug(`listen to port ${port}`));
