@@ -233,7 +233,8 @@ export default new (class extends Controller {
     }
     /** copy a dir or a file */
     async postCopyOne(req: Express.Request, res: Express.Response): Promise<void> {
-        const { base_path, dist_path, keep } = req.body;
+        let { base_path, dist_path, keep } = req.body;
+        dist_path = dist_path.join("");
         const keepBoolean = keep === "false" ? false : keep === "true" ? true : true;
         const noQueryUrl = req.originalUrl.replace(/(.*)(\?.*)/g, "$1");
         if (!base_path || !dist_path) return response({
