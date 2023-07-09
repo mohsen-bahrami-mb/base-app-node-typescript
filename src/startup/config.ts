@@ -6,7 +6,7 @@ import cors from "cors";
 import methodOverride from "method-override";
 import requestIp from "request-ip";
 import cookieParser from "cookie-parser";
-import { allowCORS, extractJSON } from "./configuration/appConfigSecurity";
+import { allowCORS, extractJSON, helmetConfig } from "./configuration/appConfigSecurity";
 // import middlewares
 import content from "../middlewares/content";
 // import modules types
@@ -14,7 +14,7 @@ import Express from "express";
 import { CorsOptions } from "cors";
 
 export default function (app: Express.Application): void {
-    app.use(helmet());
+    app.use(helmet(helmetConfig));
     app.use(requestIp.mw());
     app.use(cors(allowCORS as CorsOptions));
     app.use(express.json(extractJSON));

@@ -20,6 +20,16 @@ export const allowCORS = {
 };
 /** allowCORS module - end */
 
+/** helmet config module - start */
+export const helmetConfig = {
+    contentSecurityPolicy: {
+        directives: {
+            'script-src': ["'self'", <string>process.env["Content-Security-Policy_script-src"]]
+        }
+    }
+};
+/** helmet config module - end */
+
 /** extractJSON module - start */
 export const extractJSON = {
     verify: function (
