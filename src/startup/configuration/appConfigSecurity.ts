@@ -24,7 +24,7 @@ export const allowCORS = {
 export const helmetConfig = {
     contentSecurityPolicy: {
         directives: {
-            'script-src': ["'self'", <string>process.env["Content-Security-Policy_script-src"]]
+            'script-src': ["'self'", <string>process.env.Content_Security_Policy_script_src]
         }
     }
 };
